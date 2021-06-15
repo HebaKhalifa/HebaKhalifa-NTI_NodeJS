@@ -1,0 +1,32 @@
+{{>header.layout}}
+{{>navbar.layout}}
+{{#if errorStatus}}
+<div class="container alert alert-danger my-3 ">
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+</div>
+{{/if}}
+<section class="container my-4">
+    <form>
+        <div class="mb-3">
+            <input type="text" name="title" {{#if record}} value="{{record.title}}" {{/if}} placeholder="task title"
+                class="form-control">
+        </div>
+        <div class="mb-3">
+            <textarea placeholder="task content" name="content"
+                class="form-control">{{#if record}} {{record.content}} {{/if}} </textarea>
+        </div>
+        <div class="mb-3">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1" name="status"
+            {{#if record}} {{#if record.status}} checked {{/if}} {{/if}}>
+            <label class="form-check-label" for="exampleCheck1">Task Status</label>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-success"> {{#if record}}Edit {{else}} add Task{{/if}}</button>
+        </div>
+    </form>
+</section>
+{{>footer.layout}}
