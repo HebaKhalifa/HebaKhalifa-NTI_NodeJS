@@ -1,0 +1,31 @@
+{{>header.layout}}
+{{>navbar.layout}}
+<section class="container my-3">
+{{#if usersLen}}
+<div class="alert alert-danger ">
+no data to show
+</div>
+{{else}}
+<table class="table table-stripped">
+    <thead>
+        <th>User Name</th>
+        <th>Password</th>
+        <th>actions</th>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <td>{{this.userName}}</td>
+            <td>{{this.password}}</td>
+            <td>
+                <a href="/showSingleUser/{{this._id}}" class="btn btn-primary">show</a>
+                <a href="/editUser/{{this._id}}" class="btn btn-success">edit</a>
+                <a href="/deleteUser/{{this._id}}" class="btn btn-danger">delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+</section>
+{{>footer.layout}}

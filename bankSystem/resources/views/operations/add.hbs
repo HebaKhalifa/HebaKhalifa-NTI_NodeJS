@@ -1,0 +1,32 @@
+{{>header.layout}}
+{{>navbar.layout}}
+{{#if loginMessage}}
+<div class="container alert alert-danger my-3 ">
+    Login Error
+</div>
+{{/if}}
+
+
+
+<section class="container my-4">
+    <form method="POST">
+        <div class="mb-3">
+            <input type="text" name="amount" {{#if operation}} value="{{operation.amount}}" {{/if}} placeholder="Amount"
+                class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="date" name="date" {{#if operation}} value="{{operation.date}}" {{/if}}
+                class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="text" name="location" {{#if operation}} value="{{operation.location}}" {{/if}} placeholder="Location"
+                class="form-control">
+        </div>
+        
+        
+        <div class="mb-3">
+            <button class="btn btn-success"> {{#if operation}}Edit {{else}} Add {{/if}}</button>
+        </div>
+    </form>
+</section>
+{{>footer.layout}}

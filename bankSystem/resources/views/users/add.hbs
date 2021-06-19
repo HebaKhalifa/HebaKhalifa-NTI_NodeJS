@@ -1,0 +1,30 @@
+{{>header.layout}}
+{{>navbar.layout}}
+{{#if loginMessage}}
+<div class="container alert alert-danger my-3 ">
+    Login Error
+</div>
+{{/if}}
+
+
+
+<section class="container my-4">
+    <form method="POST">
+        <div class="mb-3">
+            <input type="text" name="userName" {{#if user}} value="{{user.userName}}" {{/if}} placeholder="User Name"
+                class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="password" name="password" {{#if user}} value="{{user.password}}" {{/if}} placeholder="Password"
+                class="form-control">
+        </div>
+        
+        
+        <div class="mb-3">
+            <button class="btn btn-success"> {{#if user}}Edit {{else}}
+                 {{#if userLogin }} Login {{else}}{{#if loginMessage }} Login {{else}}
+                  Register {{/if}}{{/if}} {{/if}}</button>
+        </div>
+    </form>
+</section>
+{{>footer.layout}}

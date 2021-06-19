@@ -1,0 +1,35 @@
+{{>header.layout}}
+{{>navbar.layout}}
+{{#if userSession}}
+{{/if}}
+<div class="container">
+    <div class="m-3">
+        <a class="btn btn-primary" href="/add" role="button">Add Operation</a>
+    </div>
+</div>
+
+<section class="container my-3">
+
+<table class="table table-stripped">
+    <thead>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Action</th>
+    </thead>
+    <tbody>
+        {{#each summary}}
+        <tr>
+            <td>{{this.amount}}</td>
+            <td>{{this.date}}</td>
+            <td>{{this.location}}</td>
+            <td>
+                <a href="/operationDetails/{{this._id}}" class="btn btn-primary">show</a>
+                <a href="/editOperation/{{this._id}}" class="btn btn-success">edit</a>
+                <a href="/deleteOperation/{{this._id}}" class="btn btn-danger">delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</section>

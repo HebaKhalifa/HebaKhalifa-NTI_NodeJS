@@ -10,7 +10,7 @@
 </div>
 {{/if}}
 <section class="container my-4">
-    <form>
+    <form action="/addTask" method="POST">
         <div class="mb-3">
             <input type="text" name="title" {{#if record}} value="{{record.title}}" {{/if}} placeholder="task title"
                 class="form-control">

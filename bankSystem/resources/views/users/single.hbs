@@ -1,0 +1,19 @@
+{{>header.layout}}
+{{>navbar.layout}}
+<section class="container my-5">
+    {{#if user}}
+    <div class="alert alert-success">
+        <ul>
+        <li>{{user.userName}}</li>
+        <li>{{user.Password}}</li>
+
+        </ul>
+    </div>
+    
+    {{else}}
+        <div class="alert alert-danger">
+            no data found
+        </div>
+    {{/if}}
+</section>
+{{>footer.layout}}
