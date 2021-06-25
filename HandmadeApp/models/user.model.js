@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
-    userType: { type: Number, enum: [0, 1, 2], required: true },
     userName: { type: String, required: true },
     email: {
       type: String,
@@ -15,22 +14,42 @@ const userSchema = new mongoose.Schema(
       },
     },
     password: { type: String, required: true },
-    profilePicture: { type: String , trim:true, default:null},
+    profilePicture: { type: String, trim: true, default: null },
     phone: { type: String },
     address: { type: String },
     accountStatus: { type: Boolean },
     paymentMethod: { type: String, enum: ["Cash", "Fawry", "Visa"] },
     adminNotes: { type: String, default: "" },
     tokens: [{ token: { type: String } }],
+    reservations: [
+      {
+        product_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Product",
+        },
+        reservationDate: { type: Date, default: new Date() },
+        deliveryDate: { type: Date, default: new Date().getDay + 2 },
+        status: {
+          type: String,
+          enum: ["reserved", "confirmed", "delivering", "deliverd", "done"],
+          default: "reserved",
+          trim: true,
+        },
+        active: { type: Boolean, default: false },
+        deliveryWay: {
+          way: {
+            type: String,
+            enum: ["Post", "Shipping Company", "delivery representative"],
+          },
+          details: { type: String, trim: true, default: null },
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-userSchema.virtual("userReservations", {
-  ref: "Reservation",
-  localField: "_id",
-  foreignField: "user_id",
-});
 
 userSchema.methods.toJSON = function () {
   let user = this.toObject();
@@ -57,16 +76,15 @@ userSchema.statics.logMeOn = async (email, password) => {
   return user;
 };
 
-userSchema.pre('remove',async function(next){
-  try{
-      user = this
-      Post.deleteMany({user_id:user._id})
-      next()
+userSchema.pre("remove", async function (next) {
+  try {
+    user = this;
+    Post.deleteMany({ user_id: user._id });
+    next();
+  } catch (e) {
+    throw new error(e);
   }
-  catch(e){
-      throw new error(e)
-  }
-})
+});
 
 userSchema.pre("save", async function (next) {
   try {
