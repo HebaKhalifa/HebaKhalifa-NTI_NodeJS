@@ -8,11 +8,12 @@ const productSchema = new mongoose.Schema(
     },
     productName: { type: String, trim: true, default: null },
     discription: { type: String, trim: true, default: null },
-    images: [{ type: String, required:true , trim: true, default: null }],
+    images: [{ type: String, required: true, trim: true, default: null }],
     rates: [{ type: String, trim: true, default: null }],
     reviews: [{ type: String, trim: true, default: null }],
     price: { type: Number, required: true },
     offer: { type: Number },
+    defaultMakingTime: { type: Number, required: true },
   },
   { timestamps: true }
 );
@@ -22,8 +23,6 @@ productSchema.virtual("productReservations", {
   localField: "_id",
   foreignField: "product_id",
 });
-
-
 
 const product = mongoose.model("product", productSchema);
 module.exports = product;

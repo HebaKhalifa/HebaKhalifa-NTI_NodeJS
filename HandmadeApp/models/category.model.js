@@ -12,7 +12,15 @@ categorySchema.virtual("categoryProduct", {
   foreignField: "category_id",
 });
 
-
+categorySchema.pre("remove", async function (next) {
+  try {
+    category = this;
+    Reservation.deleteMany({ category_id: category._id });
+    next();
+  } catch (e) {
+    throw new error(e);
+  }
+});
 
 const Category = mongoose.model("Category", categorySchema);
 module.exports = Category;

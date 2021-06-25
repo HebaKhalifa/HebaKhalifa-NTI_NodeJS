@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Reservation = require("../models/reservation.model");
 const userSchema = new mongoose.Schema(
   {
     userName: { type: String, required: true },
@@ -23,33 +24,22 @@ const userSchema = new mongoose.Schema(
     tokens: [{ token: { type: String } }],
     reservations: [
       {
-        product_id: {
+        reservation_id: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: "Product",
-        },
-        reservationDate: { type: Date, default: new Date() },
-        deliveryDate: { type: Date, default: new Date().getDay + 2 },
-        status: {
-          type: String,
-          enum: ["reserved", "confirmed", "delivering", "deliverd", "done"],
-          default: "reserved",
-          trim: true,
-        },
-        active: { type: Boolean, default: false },
-        deliveryWay: {
-          way: {
-            type: String,
-            enum: ["Post", "Shipping Company", "delivery representative"],
-          },
-          details: { type: String, trim: true, default: null },
-        },
+          ref: "Reservation",
+        }
       },
     ],
   },
   { timestamps: true }
 );
 
+userSchema.virtual("userReservations", {
+  ref: "Reservation",
+  localField: "_id",
+  foreignField: "user_id",
+});
 
 userSchema.methods.toJSON = function () {
   let user = this.toObject();
@@ -79,7 +69,7 @@ userSchema.statics.logMeOn = async (email, password) => {
 userSchema.pre("remove", async function (next) {
   try {
     user = this;
-    Post.deleteMany({ user_id: user._id });
+    Reservation.deleteMany({ user_id: user._id });
     next();
   } catch (e) {
     throw new error(e);

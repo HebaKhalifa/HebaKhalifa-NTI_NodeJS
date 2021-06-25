@@ -22,16 +22,16 @@ const adminSchema = new mongoose.Schema(
     tokens: [{ token: { type: String } }],
     orders: [
       {
-        priority: { type: String, enum:['natural','speedy'], required: true },
-        admin_id: { type: mongoose.Schema.Types.ObjectId },
-        user_id: { type: mongoose.Schema.Types.ObjectId },
-        reservation_id: { type: mongoose.Schema.Types.ObjectId },
+        reservation_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Reservation",
+        },
       },
     ],
   },
   { timestamps: true }
 );
-
 
 adminSchema.methods.toJSON = function () {
   let admin = this.toObject();
