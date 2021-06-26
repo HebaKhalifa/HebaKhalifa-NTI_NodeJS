@@ -19,6 +19,7 @@ const adminSchema = new mongoose.Schema(
     phone: { type: String },
     address: { type: String },
     accountStatus: { type: Boolean },
+    accountAvtivationAccount:{type:String , default:""},
     tokens: [{ token: { type: String } }],
     orders: [
       {

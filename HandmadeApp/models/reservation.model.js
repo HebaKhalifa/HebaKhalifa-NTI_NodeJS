@@ -11,8 +11,16 @@ const reservationSchema = new mongoose.Schema(
       required: true,
       ref: "Product",
     },
+    maker: {
+      admin_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        default: null,
+        ref: "Admin",
+      },
+    },
     reservationDate: { type: Date, default: new Date() },
-    deliveryDate: { type: Date, default: new Date().getDay + 2 },
+    deliveryDate: { type: Date },
     status: {
       type: String,
       enum: ["reserved", "confirmed", "delivering", "deliverd", "done"],
@@ -24,8 +32,9 @@ const reservationSchema = new mongoose.Schema(
       way: {
         type: String,
         enum: ["Post", "Shipping Company", "delivery representative"],
+        required: true,
       },
-      cost:{type:Number , required:true},
+      cost: { type: Number, required: true },
       deliveringTime: { type: Number, required: true },
       details: { type: String, trim: true, default: null },
     },

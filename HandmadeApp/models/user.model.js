@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
     phone: { type: String },
     address: { type: String },
     accountStatus: { type: Boolean },
+    accountActivation:{type:String , default:""},
     paymentMethod: { type: String, enum: ["Cash", "Fawry", "Visa"] },
     adminNotes: { type: String, default: "" },
     tokens: [{ token: { type: String } }],
@@ -62,7 +63,7 @@ userSchema.statics.logMeOn = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) throw new Error("invalid email");
   const matchPass = await bcrypt.compare(password, user.password);
-  if (!matchPass) throw new Error("invalid pass");
+  if (!matchPass) throw new Error("invalid password");
   return user;
 };
 
