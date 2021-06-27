@@ -38,6 +38,7 @@ const reservationSchema = new mongoose.Schema(
       deliveringTime: { type: Number, required: true },
       details: { type: String, trim: true, default: null },
     },
+    quantity:{type:Number,required:true,default:1},
     priority: { type: Boolean, default: false, required: true },
     expectedTime: { type: Number, required: true },
   },

@@ -1,3 +1,6 @@
+const bcrypt = require("bcryptjs");
+
+
 const checkValidUpdates = (req, res) => {
   let allowed = [
     "userName",
@@ -32,7 +35,7 @@ const checkValidUpdates = (req, res) => {
   }
 };
 
-const verifyEmail = async (req, res) => {
+const verifyEmail = async (req) => {
   req.user["accountActivation"] = await bcrypt.hash("activate", 12);
   req.user["accountStatus"] = false;
   await user.save();

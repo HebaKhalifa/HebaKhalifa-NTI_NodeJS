@@ -6,6 +6,7 @@ const create = async (req, res) => {
   try {
     let user = new User(req.body);
     user.accountActivation = await bcrypt.hash("activate", 12);
+    user.forgotPassword = await bcrypt.hash("forgotPassword", 12);
     await user.save();
     res.status(200).send({
       status: true,
@@ -21,24 +22,31 @@ const create = async (req, res) => {
   }
 };
 
-const generateActivationLink = () => {
-  let user = req.user;
-  return (
-    "/activateUser?email=" +
-    user.email +
-    "&activationKey=" +
-    user.accountActivation
-  );
+/*will be used to send reset password link to email */
+const generateresetPasswordLink = (email, forgotPassword) => {
+  return "/resetPassword?email="
+    .concat(email)
+    .concat("&forgotPasswordKey=")
+    .concat(forgotPassword);
+};
+
+/*will be used to send activation link to email */
+const generateActivationLink = (email, accountActivation) => {
+  return "/activateUser?email="
+    .concat(email)
+    .concat("&activationKey=")
+    .concat(accountActivation);
 };
 
 const activate = async (req, res) => {
   try {
-    if (!req.query.email || !req.query.activationKey) res.send("invalid url");
+    if (!req.query.email || !req.query.activationKey)
+      return res.send("invalid url");
     const user = await User.findOne({
       email: req.query.email,
     });
-
-    if (user.accountStatus) res.send("already activated");
+    if (!user) return res.send("user not found");
+    if (user.accountStatus) return res.send("already activated");
     user.accountStatus = true;
     user.accountActivation = null;
 
@@ -64,10 +72,10 @@ const login = async (req, res) => {
   try {
     const user = await User.logMeOn(req.body.email, req.body.password);
     if (user.accountActivation)
-      res.send(
+      return res.send(
         "you must activate your account with activation link that sent to your mail"
       );
-    else if (!user.accountStatus) user.accountStatus = true;
+    if (!user.accountStatus) user.accountStatus = true;
     const token = await user.generateAuthToken();
     res.status(200).send({
       status: true,
@@ -122,21 +130,69 @@ const edit = async (req, res) => {
   try {
     updates.forEach((update) => {
       if (update == "email") {
-        const accountActivation = async () => {
-          req.user["accountActivation"] = await bcrypt.hash("activate", 12);
-          req.user["accountStatus"] = false;
-          await user.save();
-        };
-        accountActivation();
-
-        // helper.verifyEmail(req,res);
-
+        helper.verifyEmail(req);
       }
       req.user[update] = req.body[update];
     });
     await req.user.save();
     res.status(200).send({
       message: "updated",
+      status: true,
+    });
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
+};
+
+const editPassword = async (req, res) => {
+  try {
+    if (
+      !req.body.oldPassword ||
+      !req.body.newPassword ||
+      !req.body.confirmPassword
+    )
+      return res.send("there is missing feilds!");
+    let oldPassword = req.body.oldPassword;
+    let check = await req.user.verifyPassword(oldPassword);
+    if (!check) return res.send("password is not correct!");
+    if (req.body.newPassword !== req.body.confirmPassword)
+      return res.send("new password does not match with confirm password!");
+    req.user.password = req.body.newPassword;
+    await req.user.save();
+    res.status(200).send({
+      message: "password updated",
+      status: true,
+    });
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  try {
+    if (!req.query.email || !req.query.forgotPasswordKey)
+      res.send("invalid url");
+    const user = await User.findOne({
+      email: req.query.email,
+    });
+    if (!user) return res.send("user not found");
+    if (
+      !req.body.newPassword ||
+      !req.body.confirmPassword
+    )
+      return res.send("there is missing feilds!");
+      if (req.body.newPassword !== req.body.confirmPassword)
+      return res.send("new password does not match with confirm password!");
+    user.password = req.body.newPassword;
+    await user.save();
+    res.status(200).send({
+      message: "password updated",
       status: true,
     });
   } catch (e) {
@@ -159,6 +215,19 @@ const remove = async (req, res) => {
   }
 };
 
+const removeUser = async (req, res) => {
+  try {
+    let id = req.params.id;
+    await User.findByIdAndDelete(id);
+    res.status(200).send("removed");
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
+};
+
 module.exports = {
   create,
   generateActivationLink,
@@ -170,5 +239,9 @@ module.exports = {
   showProfile,
   showAll,
   edit,
+  editPassword,
+  generateresetPasswordLink,
+  forgotPassword,
   remove,
+  removeUser,
 };

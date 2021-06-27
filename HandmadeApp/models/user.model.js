@@ -15,11 +15,12 @@ const userSchema = new mongoose.Schema(
       },
     },
     password: { type: String, required: true },
+    forgotPassword:{type:String,required:true},
     profilePicture: { type: String, trim: true, default: null },
     phone: { type: String },
     address: { type: String },
     accountStatus: { type: Boolean },
-    accountActivation:{type:String , default:""},
+    accountActivation: { type: String, default: "" },
     paymentMethod: { type: String, enum: ["Cash", "Fawry", "Visa"] },
     adminNotes: { type: String, default: "" },
     tokens: [{ token: { type: String } }],
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: "Reservation",
-        }
+        },
       },
     ],
   },
@@ -57,6 +58,10 @@ userSchema.methods.generateAuthToken = async function () {
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
+};
+
+userSchema.methods.verifyPassword = function (password) {
+  return bcrypt.compare(password, this.password);
 };
 
 userSchema.statics.logMeOn = async (email, password) => {
