@@ -25,7 +25,7 @@ const checkValidUpdates = (req, res) => {
     return res.status(500).send({
       status: false,
       data: notAllowed,
-      message:"not allowed"
+      message: "not allowed",
     });
   } else {
     return updates;
@@ -33,27 +33,12 @@ const checkValidUpdates = (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  try {
-      console.log('**********************************');
-      console.log(req.user[accountActivation]);
-      req.user.accountActivation = await bcrypt.hash("activate", 12);
-      console.log(req.user);
-    await user.save();
-    res.status(200).send({
-      status: true,
-      message: "accountActivation is created",
-      data: { user },
-    });
-  } catch (e) {
-    res.status(500).send({
-      status: false,
-      error: e,
-      message: "accountActivation error",
-    });
-  }
+  req.user["accountActivation"] = await bcrypt.hash("activate", 12);
+  req.user["accountStatus"] = false;
+  await user.save();
 };
 
 module.exports = {
   checkValidUpdates,
-  verifyEmail
+  verifyEmail,
 };

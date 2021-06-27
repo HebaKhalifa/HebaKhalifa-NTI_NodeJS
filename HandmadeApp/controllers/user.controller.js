@@ -118,13 +118,20 @@ const showAll = async (req, res) => {
 };
 
 const edit = async (req, res) => {
-  let updates=helper.checkValidUpdates(req, res);
+  let updates = helper.checkValidUpdates(req, res);
   try {
     updates.forEach((update) => {
-      if(update=='email'){
+      if (update == "email") {
+        const accountActivation = async () => {
+          req.user["accountActivation"] = await bcrypt.hash("activate", 12);
+          req.user["accountStatus"] = false;
+          await user.save();
+        };
+        accountActivation();
+
         // helper.verifyEmail(req,res);
-        // continue;
-      } 
+
+      }
       req.user[update] = req.body[update];
     });
     await req.user.save();
@@ -141,16 +148,15 @@ const edit = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-  try{    
-    await req.user.remove()
-    res.status(200).send('removed');
-}
-catch(e){
-  res.status(500).send({
-    status:false,
-    message:e.message
-  })
-}
+  try {
+    await req.user.remove();
+    res.status(200).send("removed");
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
 };
 
 module.exports = {
