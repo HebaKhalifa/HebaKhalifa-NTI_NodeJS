@@ -15,7 +15,7 @@ const create = async (req, res) => {
   } catch (e) {
     res.status(500).send({
       status: false,
-      error: e,
+      error: e.message,
       message: "user addition error",
     });
   }
@@ -105,7 +105,7 @@ const forgotPassword = async (req, res) => {
 const removeUser = async (req, res) => {
   try {
     let id = req.params.id;
-    await User.findByIdAndDelete(id);
+    let user=await User.findByIdAndDelete(id);
     res.status(200).send("removed");
   } catch (e) {
     res.status(500).send({

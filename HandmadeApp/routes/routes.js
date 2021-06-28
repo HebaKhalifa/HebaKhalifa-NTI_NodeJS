@@ -5,6 +5,11 @@ const auth=require('../middlewares/auth');
 const userController = require("../controllers/user.controller");
 const commonUserController = require("../controllers/commonUser.controller");
 const adminController = require("../controllers/admin.controller");
+const categoryController=require("../controllers/category.controller");
+const productController=require("../controllers/product.controller");
+
+
+
 /**User routes */
 router.post("/register", userController.create);
 router.post("/login", userController.login);
@@ -40,6 +45,23 @@ router.delete("/admin/deleteUser/:id",auth.adminAuth, userController.removeUser)
 router.get("/admin/allAdmins",auth.superAdminAuth, adminController.showAll);
 router.delete("/admin/deleteAdmin/:id",auth.superAdminAuth, adminController.removeAdmin);
 router.patch("/admin/makeSuperAdmin/:id",auth.superAdminAuth, adminController.makeSuperAdmin);
+
+/**category routes */
+router.post("/addCategory",auth.adminAuth,categoryController.create);
+router.get("/allCategories",categoryController.showAll);
+router.patch("/editCategory/:id",auth.adminAuth,categoryController.edit);
+router.delete("/deleteCategory/:id",auth.adminAuth,categoryController.remove);
+
+
+/**product routes */
+router.post("/addProduct",auth.adminAuth,productController.create);
+router.get("/product/:id",productController.showProduct);
+router.get("/",productController.showAll);
+router.get("/category/:id",productController.showByCategory);
+router.patch("/editProduct/:id",auth.adminAuth,productController.edit);
+router.patch("/makeOffer/:id",auth.adminAuth,productController.makeOffer);
+router.patch("/endOffer/:id",auth.adminAuth,productController.endOffer);
+router.delete("/deleteProduct/:id",auth.adminAuth,productController.remove);
 
 
 module.exports = router;

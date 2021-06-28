@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Product=require('../models/product.model')
 const categorySchema = new mongoose.Schema(
   {
     categoryName: { type: String, unique:true, trim: true,required:true},
@@ -15,7 +16,7 @@ categorySchema.virtual("categoryProduct", {
 categorySchema.pre("remove", async function (next) {
   try {
     category = this;
-    Reservation.deleteMany({ category_id: category._id });
+    Product.deleteMany({ category_id: category._id });
     next();
   } catch (e) {
     throw new error(e);

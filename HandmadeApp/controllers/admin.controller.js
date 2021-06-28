@@ -104,8 +104,9 @@ const forgotPassword = async (req, res) => {
 const removeAdmin = async (req, res) => {
   try {
     let id = req.params.id;
-    // let admin =await Admin.findOne({_id:id});
-    // if(admin.adminRole)return res.send('super admin can not be removed');
+    let admin =await Admin.findOne({_id:id});
+    if(!admin) return res.send('admin not found!');
+    if(admin.adminRole)return res.send('super admin can not be removed');
     await Admin.findByIdAndDelete(id);
     res.status(200).send("removed");
   } catch (e) {
@@ -121,7 +122,7 @@ const makeSuperAdmin = async (req, res) => {
     let id = req.params.id;
     if(id==req.user._id)return res.send('you can not remove yourself');
     let admin=await Admin.findOne({_id:id});
-    if(!admin) return res.send('admin not found!')
+    if(!admin) return res.send('admin not found!');
     admin.adminRole=true;
     await admin.save();
     res.status(200).send("admin has become a super admin");
