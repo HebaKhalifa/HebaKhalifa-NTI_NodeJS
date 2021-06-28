@@ -6,7 +6,6 @@ function authunticateAccount(req, res, next, account, token) {
   if (!account) throw new Error();
   req.user = account;
   req.token = token;
-  console.log(account);
   next();
 }
 
@@ -47,14 +46,27 @@ const adminAuth = async (req, res, next) => {
 };
 
 const superAdminAuth = async (req, res, next) => {
-  adminAuth();
-  if (req.user.adminRole) {
-    next();
-  } else {
+  try{
+    const token = req.header("Authorization").replace("bearer ", "");
+  const decodedToken = jwt.verify(token, process.env.JWTKEY);
+  const admin = await Admin.findOne({
+    _id: decodedToken._id,
+    "tokens.token": token,
+  });
+  if (!admin || !admin.adminRole) {
+    res.status(500).send({
+      status: false,
+      message: "unsuperAdmin",
+    });
+  }else{
+    authunticateAccount(req, res, next, admin, token);
+  }
+  }
+  catch(e){
     res.status(500).send({
       status: false,
       error: e.message,
-      message: "unsuperAdmin",
+      message: "unauthorized",
     });
   }
 };

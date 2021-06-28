@@ -1,13 +1,11 @@
 const bcrypt = require("bcryptjs");
 
-
 const checkValidUpdates = (req, res) => {
   let allowed = [
     "userName",
     "email",
     "phone",
     "address",
-    "paymentMethod",
     "profilePicture",
   ];
 
@@ -41,7 +39,25 @@ const verifyEmail = async (req) => {
   await user.save();
 };
 
+/*will be used to send reset password link to email */
+const generateresetPasswordLink = (email, forgotPassword) => {
+  return "/resetPassword?email="
+    .concat(email)
+    .concat("&forgotPasswordKey=")
+    .concat(forgotPassword);
+};
+
+/*will be used to send activation link to email */
+const generateActivationLink = (email, accountActivation) => {
+  return "/activateUser?email="
+    .concat(email)
+    .concat("&activationKey=")
+    .concat(accountActivation);
+};
+
 module.exports = {
   checkValidUpdates,
   verifyEmail,
+  generateActivationLink,
+  generateresetPasswordLink,
 };

@@ -15,11 +15,12 @@ const adminSchema = new mongoose.Schema(
       },
     },
     password: { type: String, required: true },
+    forgotPassword: { type: String, required: true },
     profilePicture: { type: String, trim: true, default: null },
     phone: { type: String },
     address: { type: String },
     accountStatus: { type: Boolean },
-    accountAvtivationAccount:{type:String , default:""},
+    accountActivation: { type: String, default: "" },
     tokens: [{ token: { type: String } }],
     orders: [
       {
@@ -51,11 +52,15 @@ adminSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
+adminSchema.methods.verifyPassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
 adminSchema.statics.logMeOn = async (email, password) => {
-  const admin = await admin.findOne({ email });
+  const admin = await Admin.findOne({ email });
   if (!admin) throw new Error("invalid email");
   const matchPass = await bcrypt.compare(password, admin.password);
-  if (!matchPass) throw new Error("invalid pass");
+  if (!matchPass) throw new Error("invalid password");
   return admin;
 };
 

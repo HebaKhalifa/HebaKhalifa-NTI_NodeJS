@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
-const helper = require("../helpers/helpers");
 
 const create = async (req, res) => {
   try {
@@ -22,22 +21,6 @@ const create = async (req, res) => {
   }
 };
 
-/*will be used to send reset password link to email */
-const generateresetPasswordLink = (email, forgotPassword) => {
-  return "/resetPassword?email="
-    .concat(email)
-    .concat("&forgotPasswordKey=")
-    .concat(forgotPassword);
-};
-
-/*will be used to send activation link to email */
-const generateActivationLink = (email, accountActivation) => {
-  return "/activateUser?email="
-    .concat(email)
-    .concat("&activationKey=")
-    .concat(accountActivation);
-};
-
 const activate = async (req, res) => {
   try {
     if (!req.query.email || !req.query.activationKey)
@@ -55,16 +38,6 @@ const activate = async (req, res) => {
     res.status(200).send("successfully activated");
   } catch (e) {
     res.status(500).send("activation error!");
-  }
-};
-
-const deactivate = async (req, res) => {
-  try {
-    req.user.accountStatus = false;
-    await req.user.save();
-    res.status(200).send("deactivated");
-  } catch (e) {
-    res.status(200).send("deactivation error");
   }
 };
 
@@ -91,86 +64,12 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
-  try {
-    let index = req.user.tokens.findIndex((item) => item.token == req.token);
-    req.user.tokens.splice(index, 1);
-    await req.user.save();
-    res.status(200).send("log out");
-  } catch (e) {
-    res.status(500).send(e.message);
-  }
-};
-
-const logoutAllDevices = async (req, res) => {
-  try {
-    req.user.tokens = [];
-    await req.user.save();
-    res.status(200).send("log out");
-  } catch (e) {
-    res.status(500).send(e.message);
-  }
-};
-
-const showProfile = (req, res) => {
-  res.send(req.user);
-};
-
 const showAll = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).send(users);
   } catch (e) {
     res.status(500).send(e.message);
-  }
-};
-
-const edit = async (req, res) => {
-  let updates = helper.checkValidUpdates(req, res);
-  try {
-    updates.forEach((update) => {
-      if (update == "email") {
-        helper.verifyEmail(req);
-      }
-      req.user[update] = req.body[update];
-    });
-    await req.user.save();
-    res.status(200).send({
-      message: "updated",
-      status: true,
-    });
-  } catch (e) {
-    res.status(500).send({
-      status: false,
-      message: e.message,
-    });
-  }
-};
-
-const editPassword = async (req, res) => {
-  try {
-    if (
-      !req.body.oldPassword ||
-      !req.body.newPassword ||
-      !req.body.confirmPassword
-    )
-      return res.send("there is missing feilds!");
-    let oldPassword = req.body.oldPassword;
-    let check = await req.user.verifyPassword(oldPassword);
-    if (!check) return res.send("password is not correct!");
-    if (req.body.newPassword !== req.body.confirmPassword)
-      return res.send("new password does not match with confirm password!");
-    req.user.password = req.body.newPassword;
-    await req.user.save();
-    res.status(200).send({
-      message: "password updated",
-      status: true,
-    });
-  } catch (e) {
-    res.status(500).send({
-      status: false,
-      message: e.message,
-    });
   }
 };
 
@@ -203,18 +102,6 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-const remove = async (req, res) => {
-  try {
-    await req.user.remove();
-    res.status(200).send("removed");
-  } catch (e) {
-    res.status(500).send({
-      status: false,
-      message: e.message,
-    });
-  }
-};
-
 const removeUser = async (req, res) => {
   try {
     let id = req.params.id;
@@ -230,18 +117,9 @@ const removeUser = async (req, res) => {
 
 module.exports = {
   create,
-  generateActivationLink,
   activate,
-  deactivate,
   login,
-  logout,
-  logoutAllDevices,
-  showProfile,
   showAll,
-  edit,
-  editPassword,
-  generateresetPasswordLink,
   forgotPassword,
-  remove,
   removeUser,
 };
