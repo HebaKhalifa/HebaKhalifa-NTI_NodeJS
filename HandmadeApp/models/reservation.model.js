@@ -14,7 +14,6 @@ const reservationSchema = new mongoose.Schema(
     maker: {
       admin_id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         default: null,
         ref: "Admin",
       },
@@ -38,9 +37,10 @@ const reservationSchema = new mongoose.Schema(
       deliveringTime: { type: Number, required: true },
       details: { type: String, trim: true, default: null },
     },
-    quantity:{type:Number,required:true,default:1},
+    quantity: { type: Number, required: true, default: 1 },
     priority: { type: Boolean, default: false, required: true },
     expectedTime: { type: Number, required: true },
+    cost: { type: Number, required: true },
   },
   { timestamps: true }
 );

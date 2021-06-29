@@ -1,13 +1,7 @@
 const bcrypt = require("bcryptjs");
 
 const checkValidUpdates = (req, res) => {
-  let allowed = [
-    "userName",
-    "email",
-    "phone",
-    "address",
-    "profilePicture",
-  ];
+  let allowed = ["userName", "email", "phone", "address", "profilePicture"];
 
   let notAllowed = [];
   let updates = Object.keys(req.body).filter((item) => {
@@ -54,6 +48,7 @@ const generateActivationLink = (email, accountActivation) => {
     .concat("&activationKey=")
     .concat(accountActivation);
 };
+
 
 module.exports = {
   checkValidUpdates,

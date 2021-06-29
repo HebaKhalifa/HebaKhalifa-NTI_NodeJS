@@ -105,7 +105,7 @@ const forgotPassword = async (req, res) => {
 const removeUser = async (req, res) => {
   try {
     let id = req.params.id;
-    let user=await User.findByIdAndDelete(id);
+    await User.findByIdAndDelete(id);
     res.status(200).send("removed");
   } catch (e) {
     res.status(500).send({
