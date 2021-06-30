@@ -53,12 +53,9 @@ router.patch(
 );
 router.delete("/admin/delete", auth.adminAuth, commonUserController.remove);
 
-router.get("/admin/allUsers", auth.adminAuth, userController.showAll);
-router.delete(
-  "/admin/deleteUser/:id",
-  auth.adminAuth,
-  userController.removeUser
-);
+router.get("/admin/allUsers",auth.adminAuth, userController.showAll);
+router.delete("/admin/deleteUser/:id",auth.adminAuth,userController.removeUser);
+router.get("/admin/showUser/:id",auth.adminAuth, userController.showUser);
 
 /**Super Admin routes */
 router.get("/admin/allAdmins", auth.superAdminAuth, adminController.showAll);
@@ -93,11 +90,22 @@ router.delete("/deleteProduct/:id", auth.adminAuth, productController.remove);
 router.post("/reserveProduct/:id", auth.userAuth, reservationController.create);
 router.get("/showReservation/:id", auth.adminAuth, reservationController.show);
 router.get("/adminHome", auth.adminAuth, reservationController.showAll);
-router.patch("/editRservation/:id",auth.userAuth,reservationController.edit);
-router.patch("/cancelReservation/:id",auth.userAuth,reservationController.cancel);
-router.patch("/orderStatus/:id",auth.adminAuth,reservationController.updateStatus);
-router.patch("/setMakerl/:id",auth.adminAuth,reservationController.setMaker);
-
-
+router.patch("/editRservation/:id", auth.userAuth, reservationController.edit);
+router.patch(
+  "/cancelReservation/:id",
+  auth.userAuth,
+  reservationController.cancel
+);
+router.patch(
+  "/orderStatus/:id",
+  auth.adminAuth,
+  reservationController.updateStatus
+);
+router.patch(
+  "/confirmOrder/:id",
+  auth.adminAuth,
+  reservationController.confirmOrder
+);
+router.patch("/setMakerl/:id", auth.adminAuth, reservationController.setMaker);
 
 module.exports = router;

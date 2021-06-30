@@ -81,12 +81,9 @@ const forgotPassword = async (req, res) => {
       email: req.query.email,
     });
     if (!user) return res.send("user not found");
-    if (
-      !req.body.newPassword ||
-      !req.body.confirmPassword
-    )
+    if (!req.body.newPassword || !req.body.confirmPassword)
       return res.send("there is missing feilds!");
-      if (req.body.newPassword !== req.body.confirmPassword)
+    if (req.body.newPassword !== req.body.confirmPassword)
       return res.send("new password does not match with confirm password!");
     user.password = req.body.newPassword;
     await user.save();
@@ -115,6 +112,19 @@ const removeUser = async (req, res) => {
   }
 };
 
+const showUser = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let user = await User.findById(id);
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
+};
+
 module.exports = {
   create,
   activate,
@@ -122,4 +132,5 @@ module.exports = {
   showAll,
   forgotPassword,
   removeUser,
+  showUser,
 };

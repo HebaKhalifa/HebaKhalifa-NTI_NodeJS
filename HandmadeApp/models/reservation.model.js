@@ -18,7 +18,7 @@ const reservationSchema = new mongoose.Schema(
         ref: "Admin",
       },
     },
-    reservationDate: { type: Date, default: new Date() },
+    confirmationDate: { type: Date },
     deliveryDate: { type: Date },
     status: {
       type: String,
@@ -44,6 +44,7 @@ const reservationSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 
 const Reservation = mongoose.model("Reservation", reservationSchema);
 module.exports = Reservation;

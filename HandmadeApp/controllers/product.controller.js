@@ -43,9 +43,8 @@ const showAll = async (req, res) => {
 const showByCategory = async (req, res) => {
   try {
     let category_id = req.params.category_id;
-    let products = await Product.find();
-    products = products.filter((product) => {
-      return product.category_id == category_id;
+    let products = await Product.find(() => {
+      return { category_id: category_id };
     });
     res.status(200).send(products);
   } catch (e) {
@@ -66,7 +65,7 @@ const edit = async (req, res) => {
     res.status(200).send({
       message: "updated",
       status: true,
-      data:{product}
+      data: { product },
     });
   } catch (e) {
     res.status(500).send({
@@ -91,7 +90,7 @@ const remove = async (req, res) => {
 
 const makeOffer = async (req, res) => {
   try {
-      if(!req.body.offer)return res.send("There is no offer!")
+    if (!req.body.offer) return res.send("There is no offer!");
     let id = req.params.id;
     let product = await Product.findById(id);
     if (!product) return res.send("product not found!");
