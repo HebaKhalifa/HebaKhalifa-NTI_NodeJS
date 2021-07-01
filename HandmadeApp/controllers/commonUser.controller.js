@@ -17,7 +17,7 @@ const logout = async (req, res) => {
     let index = req.user.tokens.findIndex((item) => item.token == req.token);
     req.user.tokens.splice(index, 1);
     await req.user.save();
-    res.status(200).send("log out");
+    res.status(200).send({msg:"log out"});
   } catch (e) {
     res.status(500).send(e.message);
   }

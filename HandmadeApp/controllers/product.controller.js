@@ -43,9 +43,7 @@ const showAll = async (req, res) => {
 const showByCategory = async (req, res) => {
   try {
     let category_id = req.params.category_id;
-    let products = await Product.find(() => {
-      return { category_id: category_id };
-    });
+    let products = await Product.find({ category_id: category_id});
     res.status(200).send(products);
   } catch (e) {
     res.status(500).send(e.message);

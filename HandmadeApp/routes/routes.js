@@ -89,6 +89,8 @@ router.delete("/deleteProduct/:id", auth.adminAuth, productController.remove);
 /**reservation routes */
 router.post("/reserveProduct/:id", auth.userAuth, reservationController.create);
 router.get("/showReservation/:id", auth.adminAuth, reservationController.show);
+router.get("/reservations", auth.userAuth, reservationController.showByUser);
+router.get("/admin/orders", auth.adminAuth, reservationController.showByMaker);
 router.get("/adminHome", auth.adminAuth, reservationController.showAll);
 router.patch("/editRservation/:id", auth.userAuth, reservationController.edit);
 router.patch(

@@ -52,7 +52,7 @@ const login = async (req, res) => {
     const token = await user.generateAuthToken();
     res.status(200).send({
       status: true,
-      data: { user },
+      data: { user ,token },
       message: "logged in",
     });
   } catch (e) {

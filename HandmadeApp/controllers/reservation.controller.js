@@ -1,5 +1,6 @@
 const Reservation = require("../models/reservation.model");
 const Product = require("../models/product.model");
+const User = require("../models/user.model");
 
 const calculateExpectedTime = (req, product) => {
   return (
@@ -96,6 +97,33 @@ const show = async (req, res) => {
     let reservation = await Reservation.findById(id);
     if (!reservation) return res.send("reservation not found!");
     res.status(200).send(reservation);
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
+};
+
+const showByUser = async (req, res) => {
+  try {
+    let id = req.user._id;
+    let reservations = await Reservation.find({ user_id: id });
+    res.status(200).send(reservations);
+  } catch (e) {
+    res.status(500).send({
+      status: false,
+      message: e.message,
+    });
+  }
+};
+
+const showByMaker = async (req, res) => {
+  try {
+    let id = req.user._id;
+    let reservations = await Reservation.find({ "maker.admin_id": id });
+    console.log(reservations);
+    res.status(200).send(reservations);
   } catch (e) {
     res.status(500).send({
       status: false,
@@ -243,6 +271,8 @@ const setMaker = async (req, res) => {
 module.exports = {
   create,
   show,
+  showByUser,
+  showByMaker,
   showAll,
   edit,
   cancel,

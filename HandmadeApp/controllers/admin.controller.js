@@ -54,7 +54,7 @@ const login = async (req, res) => {
 
     res.status(200).send({
       status: true,
-      data: { admin },
+      data: { admin , token},
       message: "logged in",
     });
   } catch (e) {
