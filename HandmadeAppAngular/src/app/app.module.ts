@@ -32,6 +32,7 @@ import { EditPasswordAdminComponent } from './admin/edit-password-admin/edit-pas
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UserInterceptor } from './user.interceptor';
+import { ShowReservationComponent } from './user/show-reservation/show-reservation.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { UserInterceptor } from './user.interceptor';
     OfferComponent,
     EditReservationComponent,
     EditPasswordAdminComponent,
+    ShowReservationComponent,
   ],
   imports: [
     BrowserModule,

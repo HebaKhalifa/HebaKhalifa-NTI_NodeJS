@@ -22,6 +22,7 @@ import { RateProductComponent } from './user/rate-product/rate-product.component
 import { RegisterComponent } from './user/register/register.component';
 import { ReserveProductComponent } from './user/reserve-product/reserve-product.component';
 import { ReviewProductComponent } from './user/review-product/review-product.component';
+import { ShowReservationComponent } from './user/show-reservation/show-reservation.component';
 
 const routes: Routes = [
   {path:'',component:HomeComponent},
@@ -33,6 +34,7 @@ const routes: Routes = [
   {path:'reserveProduct/:id',component:ReserveProductComponent},
   {path:'review/:id',component:ReviewProductComponent},
   {path:'rate/:id',component:RateProductComponent},
+  {path:'showReservation/:id',component:ShowReservationComponent},
   // {path:'activate?',component:AccountActivationComponent},
   /***********          reset password           */
   {path:'editPassword',component:EditPasswordComponent},

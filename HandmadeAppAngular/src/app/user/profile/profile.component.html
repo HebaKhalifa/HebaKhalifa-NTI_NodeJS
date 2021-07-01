@@ -1,14 +1,19 @@
 <p>profile works!</p>
 <button class="btn btn-primary" (click)="logout()">Logout</button>
-<h1>{{user.userName}}</h1>
-<h5>{{user.email}}</h5>
-<section class="container row ">
-    <div *ngFor="let order of reservations" class="col-5 m-2">
-        <li > cost : {{order.cost}}</li>
+<h1>{{ user.userName }}</h1>
+<h5>{{ user.email }}</h5>
+<section class="container row">
+  <div>
+    <ol>
+      <li *ngFor="let order of reservations" class="col-5 m-2">
+        product name : <a routerLink="/showReservation/${{order._id}}">{{ order.productName }}</a>
+      </li>
+    </ol>
+    <!-- <li > cost : {{order.cost}}</li>
         <li >status : {{order.status}}</li>
         <li >quantity : {{order.quantity}}</li>
         <li >deliveryWay : {{order.deliveryWay.way}}</li>
         <li >confirmationDate : {{order.confirmationDate}}</li>
-        <li >deliveryDate : {{order.deliveryDate}}</li>
-    </div>
+        <li >deliveryDate : {{order.deliveryDate}}</li> -->
+  </div>
 </section>
