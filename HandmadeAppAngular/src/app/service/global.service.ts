@@ -12,7 +12,7 @@ export class GlobalService {
   loadHome(): Observable<any> {
     return this.http.get(`${this.commonUrl}`);
   }
-  
+
   activateAccount(email: string, activationKey: string): Observable<any> {
     return this.http.patch(
       `${this.commonUrl}activate?email=${{ email }}&activationKey=${{
@@ -24,6 +24,11 @@ export class GlobalService {
   profile(): Observable<any> {
     return this.http.get(`${this.commonUrl}profile`);
   }
+
+  getUserReservations(): Observable<any> {
+    return this.http.get(`${this.commonUrl}reservations`);
+  }
+
   register(user: any): Observable<any> {
     return this.http.post(`${this.commonUrl}register`, user);
   }
@@ -127,74 +132,76 @@ export class GlobalService {
     return this.http.patch(
       `${this.commonUrl}admin/makeSuperAdmin/${{ id }}`,
       null
-      );
-    }
-    
-    addCategory(category: any): Observable<any> {
-      return this.http.post(`${this.commonUrl}addCategory`,category);
-    }
-    allCategories(): Observable<any> {
-      return this.http.get(`${this.commonUrl}allCategories`);
-    }
-    editCategory(id: any,category:any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}editCategory/${{ id }}`,category);
-    }
-    deleteCategory(id: any): Observable<any> {
-      return this.http.delete(`${this.commonUrl}deleteCategory/${{ id }}`);
-    }
-    
-    addProduct(product: any): Observable<any> {
-      return this.http.post(`${this.commonUrl}addProduct`,product);
-    }
-    showProduct(id: any): Observable<any> {
-      return this.http.get(`${this.commonUrl}product/${{ id }}`);
-    }
-    showByCategory(id: any): Observable<any> {
-      return this.http.get(`${this.commonUrl}category/${{ id }}`);
-    }
-    editProduct(id:any,product: any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}editProduct/${{ id }}`,product);
-    }
-    makeOffer(id: any,offer:any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}makeOffer/${{ id }}`,offer);
-    }
-    endOffer(id: any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}endOffer/${{ id }}`,null);
-    }
-    deleteProduct(id: any): Observable<any> {
-      return this.http.delete(`${this.commonUrl}deleteProduct/${{ id }}`);
-    }
-    reserveProduct(id: any,product:any): Observable<any> {
-      return this.http.post(`${this.commonUrl}reserveProduct/${{ id }}`,product);
-    }
-    showReservation(id: any): Observable<any> {
-      return this.http.get(`${this.commonUrl}showReservation/${{ id }}`);
-    }
-    adminHome(): Observable<any> {
-      return this.http.get(`${this.commonUrl}adminHome`);
-    }
-    editRservation(id: any,order:any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}editRservation/${{ id }}`,order);
-    }
-    cancelReservation(id: any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}cancelReservation/${{ id }}`,null);
-    }
-    confirmOrder(id: any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}confirmOrder/${{ id }}`,null);
-    }
-    updateOrderStatus(id: any,status:any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}updateStatus/${{ id }}`,status);
-    }
-    setOrderMakerl(id: any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}setMakerl/${{ id }}`,null);
-    }
+    );
+  }
 
-    /********* */
-    reviewProduct(id: any,review:any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}reviewProduct/${{ id }}`,review);
-    }
-    rateProduct(id: any,rate:any): Observable<any> {
-      return this.http.patch(`${this.commonUrl}rateProduct/${{ id }}`,rate);
-    }
+  addCategory(category: any): Observable<any> {
+    return this.http.post(`${this.commonUrl}addCategory`, category);
+  }
+  allCategories(): Observable<any> {
+    return this.http.get(`${this.commonUrl}allCategories`);
+  }
+  editCategory(id: any, category: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}editCategory/${{ id }}`, category);
+  }
+  deleteCategory(id: any): Observable<any> {
+    return this.http.delete(`${this.commonUrl}deleteCategory/${{ id }}`);
+  }
 
+  addProduct(product: any): Observable<any> {
+    return this.http.post(`${this.commonUrl}addProduct`, product);
+  }
+  showProduct(id: any): Observable<any> {
+    return this.http.get(`${this.commonUrl}product/${{ id }}`);
+  }
+  showByCategory(id: any): Observable<any> {
+    return this.http.get(`${this.commonUrl}category/${{ id }}`);
+  }
+  editProduct(id: any, product: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}editProduct/${{ id }}`, product);
+  }
+  makeOffer(id: any, offer: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}makeOffer/${{ id }}`, offer);
+  }
+  endOffer(id: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}endOffer/${{ id }}`, null);
+  }
+  deleteProduct(id: any): Observable<any> {
+    return this.http.delete(`${this.commonUrl}deleteProduct/${{ id }}`);
+  }
+  reserveProduct(id: any, product: any): Observable<any> {
+    return this.http.post(`${this.commonUrl}reserveProduct/${{ id }}`, product);
+  }
+  showReservation(id: any): Observable<any> {
+    return this.http.get(`${this.commonUrl}showReservation/${{ id }}`);
+  }
+  adminHome(): Observable<any> {
+    return this.http.get(`${this.commonUrl}adminHome`);
+  }
+  editRservation(id: any, order: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}editRservation/${{ id }}`, order);
+  }
+  cancelReservation(id: any): Observable<any> {
+    return this.http.patch(
+      `${this.commonUrl}cancelReservation/${{ id }}`,
+      null
+    );
+  }
+  confirmOrder(id: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}confirmOrder/${{ id }}`, null);
+  }
+  updateOrderStatus(id: any, status: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}updateStatus/${{ id }}`, status);
+  }
+  setOrderMakerl(id: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}setMakerl/${{ id }}`, null);
+  }
+
+  /********* */
+  reviewProduct(id: any, review: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}reviewProduct/${{ id }}`, review);
+  }
+  rateProduct(id: any, rate: any): Observable<any> {
+    return this.http.patch(`${this.commonUrl}rateProduct/${{ id }}`, rate);
+  }
 }
