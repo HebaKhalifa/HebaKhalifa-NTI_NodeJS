@@ -18,6 +18,7 @@ const reservationSchema = new mongoose.Schema(
         ref: "Admin",
       },
     },
+    productName: { type: String, trim: true, default: null },
     confirmationDate: { type: Date },
     deliveryDate: { type: Date },
     status: {

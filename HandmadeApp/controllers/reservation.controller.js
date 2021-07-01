@@ -59,6 +59,7 @@ const calculateReservationValues = async (req, reservation) => {
 
   reservation.user_id = req.user._id;
   reservation.product_id = req.params.id;
+  reservation.productName = product.productName;
   reservation.cost = calculateTotalCost(product, reservation);
   reservation.expectedTime = calculateExpectedTime(req, product);
   reservation.priority = specifyPriority(
